@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+int solution(int n, int k) {
+    int free_drink = n / 10;
+
+    int pay_drink = k - free_drink;
+    if (pay_drink < 0) pay_drink = 0;
+
+    return (n * 12000) + (pay_drink * 2000);
+}
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+
+    cout << solution(n, k) << endl;
+
+    return 0;
+}
