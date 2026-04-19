@@ -1,0 +1,119 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+// 좌표 클래스
+class Point
+{
+public:
+    double x, y;
+
+    Point(double x, double y) : x(x), y(y) {}
+
+    void print() const
+    {
+        cout << "(" << x << ", " << y << ")";
+    }
+};
+
+// 원 계산 클래스
+class CircleCalculator
+{
+private:
+    vector<Point> points;
+    double cx, cy, r;
+
+public:
+    void addPoint(double x, double y)
+    {
+        if (points.size() < 3)
+            points.emplace_back(x, y);
+    }
+
+    bool calculate()
+    {
+        if (points.size() != 3)
+            return false;
+
+        double x1 = points[0].x, y1 = points[0].y;
+        double x2 = points[1].x, y2 = points[1].y;
+        double x3 = points[2].x, y3 = points[2].y;
+
+        double d = 2 * (x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2));
+
+        if (fabs(d) < 1e-6)
+            return false;
+
+        cx = ((x1*x1 + y1*y1)*(y2 - y3) +
+              (x2*x2 + y2*y2)*(y3 - y1) +
+              (x3*x3 + y3*y3)*(y1 - y2)) / d;
+
+        cy = ((x1*x1 + y1*y1)*(x3 - x2) +
+              (x2*x2 + y2*y2)*(x1 - x3) +
+              (x3*x3 + y3*y3)*(x2 - x1)) / d;
+
+        r = sqrt((cx - x1)*(cx - x1) + (cy - y1)*(cy - y1));
+
+        return true;
+    }
+
+    void printResult() const
+    {
+        cout << "\nInput Points:\n";
+        for (const auto& p : points)
+        {
+            p.print();
+            cout << endl;
+        }
+
+        cout << "\nResult:\n";
+        cout << "Center: (" << cx << ", " << cy << ")\n";
+        cout << "Radius: " << r << endl;
+    }
+
+    void clear()
+    {
+        points.clear();
+    }
+};
+
+int main()
+{
+    CircleCalculator calculator;
+
+    while (true)
+    {
+        cout << "\n===== Circumcircle Calculator (OOP + STL) =====\n";
+
+        double x, y;
+
+        for (int i = 0; i < 3; i++)
+        {
+            cout << "Enter Point " << i + 1 << " (x y): ";
+            cin >> x >> y;
+            calculator.addPoint(x, y);
+        }
+
+        if (!calculator.calculate())
+        {
+            cout << "Error: Points are collinear or invalid\n";
+        }
+        else
+        {
+            calculator.printResult();
+        }
+
+        cout << "\nContinue? (1 = Yes, 0 = Exit): ";
+        int cmd;
+        cin >> cmd;
+
+        if (cmd == 0)
+            break;
+
+        calculator.clear();
+    }
+
+    return 0;
+}
