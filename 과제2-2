@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// 문제 해결 함수
+int solution(vector<vector<int>> board, int k) {
+    int answer = 0;
+
+    for (int i = 0; i < board.size(); i++) {
+        for (int j = 0; j < board[i].size(); j++) {
+            if (i + j <= k) {
+                answer += board[i][j];
+            }
+        }
+    }
+
+    return answer;
+}
+
+// 실행용 main 함수 (컴파일러용)
+int main() {
+    int n, m, k;
+
+    cout << "Enter rows, cols, k: ";
+    cin >> n >> m >> k;
+
+    vector<vector<int>> board(n, vector<int>(m));
+
+    cout << "Enter board values:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> board[i][j];
+        }
+    }
+
+    int result = solution(board, k);
+
+    cout << "Result: " << result << endl;
+
+    return 0;
+}
